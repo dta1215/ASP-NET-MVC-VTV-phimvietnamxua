@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "TouchSlider";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<style>
+    .contentSlider {
+        position: absolute !important;
+        width: 920px;
+        height: 500px;
+        left: 253px;
+        top: 150px !important;
+        margin: auto !important;
+        right: none !important;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        overflow: hidden;
+    }
+    .sliderTouch {
+        position: absolute;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        flex-direction: column;
+        margin: auto !important;
+        left: 240px;
+    }
+    img {
+        display: block !important;
+        width: 200px;
+        float: left;
+    }
+    .progressBar {
+        position: relative;
+        top: -50px;
+        background-color: #ffffffeb;
+        height: 3px;
+        /*margin-bottom: 90px;*/
+    }
+    .renderbody{
+        padding: 0px;
+        margin: 0px;
+    }
+    @@media only screen and (max-width: 600px) {
+        .sliderTouch {
+            left: 0px;
+        }
+    }
+</style>
+<body>
+    <div class="progressBar"></div>
+    <div class="space"></div>
+    <div class="contentSlider">
+        <div class="sliderTouch">
+            @{
+                Html.RenderAction("Noidung");
+            }
+        </div>
+    </div>
+
+    <script>
+        TouchSlider()
+        function TouchSlider() {
+            const firstItem = $('.sliderTouch').children().eq(0);
+            const container = $('.contentSlider');
+            const slider = $('.sliderTouch');
+            let heightMove;
+            let isSlide = false;
+            // console.log(slider);
+            container.mousedown(function (e) {
+                e.preventDefault()
+                isSlide = true;
+                container.css('cursor',"grabbing");
+                heightMove = e.clientY - slider.offset().top + 150 /*bu cua phan thua containerSlide*/
+                // console.log(e.clientY, slider.offset().top);
+            })
+            container.mouseup(function(){
+                container.css('cursor',"grab");
+            })
+            $(window).mouseup(function(e){
+                isSlide = false;
+            })
+            container.mousemove(function (e) {
+                if(!isSlide) return;
+                slider.css('transform', `translateY(${e.clientY - heightMove}px)`)
+
+                let scrollTop = -(slider.offset().top)
+                $('.progressBar').css('width', `${(scrollTop/(slider.innerHeight()-container.innerHeight()))*100}%`)
+                limitArea()
+            })
+
+            function limitArea(){
+                let maxHeight = -(slider.innerHeight() - container.innerHeight())
+                let sliderOffsetTop = slider.offset().top
+                if(sliderOffsetTop >= 0){
+                    slider.css('transform', `translateY(0px)`)
+                }else if(sliderOffsetTop <= maxHeight){
+                    slider.css('transform', `translateY(${maxHeight}px)`)
+                    $('.progressBar').css('width', `${(-maxHeight/(slider.innerHeight()-container.innerHeight()))*100}%`)
+                }
+            }
+        }
+    </script>
+</body>
+</html>

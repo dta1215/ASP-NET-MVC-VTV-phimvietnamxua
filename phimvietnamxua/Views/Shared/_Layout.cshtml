@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng hợp phim cũ trên TV, phim truyện Việt Nam xưa</title>
+    <meta name="description" content="Tổng hợp các phim đã chiếu trên TV Việt Nam xưa. Danh sách phim cũ gắn liền tuổi thơ thế hệ 8x- 9x,...">
+    <link rel="preload" href="/Content/images/background-Purple.png" as="image">
+    <link rel="preload" href="/Content/images/background-Red.png" as="image">
+    <link rel="preload" href="/Content/images/homnayTitle.png" as="image">
+    <link rel="preload" href="/Content/images/radioTele.png" as="image">
+    <link rel="preload" href="/Content/images/trongdong.png" as="image">
+    <link rel="preload" href="/Content/images/vtv3logo.png" as="image">
+    <link rel="preload" href="/Content/images/VTV3large.png" as="image">
+    <link href="/Content/index.css?v=6" rel="stylesheet" />
+    <link href="/Content/indexMobile.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    @Styles.Render("/Content/css")
+    @Scripts.Render("/bundles/modernizr")
+</head>
+<body class="trangchu trangchuRed">
+      
+    @Html.Partial("/Views/Home/BackGround.cshtml")
+    <div class="progressSlide"></div>
+    <div class="changeGUI">
+        <text id="btnRed" class=""></text>
+        <text id="btnBlue" class=""></text>
+        <i id="btnOpenNav" class="fas fa-bars"></i>
+    </div>
+    <div class="navMenu">
+        <div class="MenuContent">
+            <i id="btnCloseNav" class="fas fa-times"></i>
+            <div class="containerOption">
+                <p id="btnTouchSlider" class="btn btn-sm btn-danger">Cuộn thủ công</p>
+                <text class="description">Chế độ trượt bằng kéo thả chuột để xem danh sách phim</text>
+                <p id="btnResetPosition" class="btn btn-sm btn-danger">Reset</p>
+                <text class="description">Trở về vị trí đầu tiên trong danh sách</text>
+                <p id="btnSavePosition" class="btn btn-sm btn-primary">Lưu vị trí</p>
+                <text class="description">Lưu vị trí hiện tại, lần sau sẽ bắt đầu từ vị trí này</text>
+            </div>
+        </div>
+    </div>
+    <div class="renderbody">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        @*@Scripts.Render("/bundles/jquery")*@
+        @Scripts.Render("/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+        @RenderBody()
+    </div>
+    <script>
+        $(document).ready(function () {
+            (function LoadBackGround() {
+                const trangchu = $('.trangchu')
+                const trangchuBGState = getCookie("trangchuBG");
+                console.log(trangchuBGState)
+                if (trangchuBGState == "red") {
+
+                } else if (trangchuBGState == "blue") {
+                    $('.trangchu').addClass('trangchuBlue')
+                    $('.trangchu').removeClass('trangchuRed')
+                } else {
+                    $('.trangchu').addClass('trangchuRed')
+                    $('.trangchu').removeClass('trangchuBlue')
+                    
+                }
+            })()
+        })
+
+        NavMenu()
+        function NavMenu() {
+            $('#btnOpenNav').click(function (e) {
+                e.stopPropagation()
+                $('.MenuContent').show()
+            })
+            $('#btnCloseNav').click(function (e) {
+                $('.MenuContent').hide()
+            })
+
+            $('#btnRed').click(function () {
+                $('.trangchu').addClass('trangchuRed')
+                $('.trangchu').removeClass('trangchuBlue')
+                //$('.trangchu').css('background-image', "url(/Content/images/background-Red.png)");
+                setCookie('trangchuBG', `red`, 1);
+            })
+            $('#btnBlue').click(function () {
+                $('.trangchu').addClass('trangchuBlue')
+                $('.trangchu').removeClass('trangchuRed')
+                //$('.trangchu').css('background-image', "url(/Content/images/background-Purple.png)");
+                setCookie('trangchuBG', `blue`, 1);
+            })
+        }
+    </script>
+</body>
+</html>

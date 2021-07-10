@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="timphimxuaRelationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="chitietphim">
+          <Key>
+            <PropertyRef Name="chitietID" />
+          </Key>
+          <Property Name="chitietID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="maphim" Type="nvarchar" MaxLength="30" />
+          <Property Name="video" Type="text" />
+          <Property Name="image" Type="text" />
+        </EntityType>
+        <EntityType Name="phim">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="maphim" Type="nvarchar" MaxLength="30" />
+          <Property Name="tenphim" Type="nvarchar" MaxLength="100" />
+          <Property Name="motaND" Type="nvarchar" MaxLength="100" />
+          <Property Name="chitietND" Type="nchar" MaxLength="500" />
+          <Property Name="thoigian" Type="date" />
+          <Property Name="hashtag" Type="nchar" MaxLength="100" />
+          <Property Name="mainImage" Type="nvarchar" MaxLength="999" />
+          <Property Name="quocgia" Type="nvarchar" MaxLength="15" />
+          <Property Name="namSX" Type="nchar" MaxLength="4" />
+          <Property Name="chitietID" Type="int" />
+        </EntityType>
+        <Association Name="FK_phim_chitietphim">
+          <End Role="chitietphim" Type="Self.chitietphim" Multiplicity="0..1" />
+          <End Role="phim" Type="Self.phim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chitietphim">
+              <PropertyRef Name="chitietID" />
+            </Principal>
+            <Dependent Role="phim">
+              <PropertyRef Name="chitietID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="timphimxuaRelationModelStoreContainer">
+          <EntitySet Name="chitietphim" EntityType="Self.chitietphim" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="phim" EntityType="Self.phim" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_phim_chitietphim" Association="Self.FK_phim_chitietphim">
+            <End Role="chitietphim" EntitySet="chitietphim" />
+            <End Role="phim" EntitySet="phim" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="timphimxuaRelationModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="chitietphim">
+          <Key>
+            <PropertyRef Name="chitietID" />
+          </Key>
+          <Property Name="chitietID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="maphim" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="video" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="phims" Relationship="Self.FK_phim_chitietphim" FromRole="chitietphim" ToRole="phim" />
+        </EntityType>
+        <EntityType Name="phim">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="maphim" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="tenphim" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="motaND" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="chitietND" Type="String" MaxLength="500" FixedLength="true" Unicode="true" />
+          <Property Name="thoigian" Type="DateTime" Precision="0" />
+          <Property Name="hashtag" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="mainImage" Type="String" MaxLength="999" FixedLength="false" Unicode="true" />
+          <Property Name="quocgia" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="namSX" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="chitietID" Type="Int32" />
+          <NavigationProperty Name="chitietphim" Relationship="Self.FK_phim_chitietphim" FromRole="phim" ToRole="chitietphim" />
+        </EntityType>
+        <Association Name="FK_phim_chitietphim">
+          <End Role="chitietphim" Type="Self.chitietphim" Multiplicity="0..1" />
+          <End Role="phim" Type="Self.phim" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chitietphim">
+              <PropertyRef Name="chitietID" />
+            </Principal>
+            <Dependent Role="phim">
+              <PropertyRef Name="chitietID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="timphimxuaRelationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="chitietphims" EntityType="Self.chitietphim" />
+          <EntitySet Name="phims" EntityType="Self.phim" />
+          <AssociationSet Name="FK_phim_chitietphim" Association="Self.FK_phim_chitietphim">
+            <End Role="chitietphim" EntitySet="chitietphims" />
+            <End Role="phim" EntitySet="phims" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="timphimxuaRelationModelStoreContainer" CdmEntityContainer="timphimxuaRelationEntities">
+          <EntitySetMapping Name="chitietphims">
+            <EntityTypeMapping TypeName="timphimxuaRelationModel.chitietphim">
+              <MappingFragment StoreEntitySet="chitietphim">
+                <ScalarProperty Name="chitietID" ColumnName="chitietID" />
+                <ScalarProperty Name="maphim" ColumnName="maphim" />
+                <ScalarProperty Name="video" ColumnName="video" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="phims">
+            <EntityTypeMapping TypeName="timphimxuaRelationModel.phim">
+              <MappingFragment StoreEntitySet="phim">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="maphim" ColumnName="maphim" />
+                <ScalarProperty Name="tenphim" ColumnName="tenphim" />
+                <ScalarProperty Name="motaND" ColumnName="motaND" />
+                <ScalarProperty Name="chitietND" ColumnName="chitietND" />
+                <ScalarProperty Name="thoigian" ColumnName="thoigian" />
+                <ScalarProperty Name="hashtag" ColumnName="hashtag" />
+                <ScalarProperty Name="mainImage" ColumnName="mainImage" />
+                <ScalarProperty Name="quocgia" ColumnName="quocgia" />
+                <ScalarProperty Name="namSX" ColumnName="namSX" />
+                <ScalarProperty Name="chitietID" ColumnName="chitietID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

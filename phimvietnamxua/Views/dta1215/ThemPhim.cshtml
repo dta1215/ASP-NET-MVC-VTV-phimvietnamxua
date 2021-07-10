@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "ThemPhim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ThemPhim</title>
+</head>
+<style>
+    body {
+        overflow: auto !important;
+    }
+    input {
+        max-width: 100px;
+        max-height: 20px;
+        border: none;
+        border-radius: 3px;
+        background-color: #33333312;
+    }
+    input#thoigian {
+        max-width: 134px;
+    }
+    .btn-sm, .btn-group-sm > .btn {
+        padding: 0px 6px;
+        font-size: 11px;
+        line-height: 1.5;
+        border-radius: 3px;
+    }
+    td#mainImage {
+        max-width: 166px;
+        height: 100px;
+    }
+    img {
+        display: block !important;
+        margin-left: -24px;
+        width: 120px !important;
+        height: 100% !important;
+        float: right !important;
+        box-shadow: none !important;s
+    }
+</style>
+<body>
+    <table id="showRecords" class="table table-responsive table-striped">
+        <thead>
+            <tr>
+                <th>Link ảnh Phim</th>
+                <th>Mã phim</th>
+                <th>Tên phim</th>
+                <th>Mô tả nội dung</th>
+                <th>Chi tiết nội dung</th>
+                <th>Quốc gia</th>
+                <th>Thời gian (2005-01-01)</th>
+                <th>Năm phát hành (19xx)</th>
+                <th>HashTag</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <button id="btnSaveRecord" class="btn btn-primary">Lưu Records</button>
+
+    <table id="AddPhimsTable" class="table">
+    <thead>
+        <tr>
+            <th>Link ảnh Phim</th>
+            <th>Mã phim</th>
+            <th>Tên phim</th>
+            <th>Mô tả nội dung</th>
+            <th>Chi tiết nội dung</th>
+            <th>Quốc gia</th>
+            <th>Thời gian</th>
+            <th>Năm phát hànhth>
+            <th>HashTag</th>
+            <th><button id="btnPlusRecord" class="btn btn-sm btn-primary">Thêm Record</button></th>
+        </tr>
+    </thead>
+    <tbody>
+        <td id="mainImage"><input type="text" id="mainImage" /></td>
+        <td id="maphim"><input type="text" id="maphim" /></td>
+        <td id="tenphim"><input type="text" id="tenphim" /></td>
+        <td id="motaND"><input type="text" id="motaND" /></td>
+        <td id="chitietND"><input type="text" id="chitietND" /></td>
+        <td id="quocgia">
+            <input type="text" id="quocgia" />  
+            <select id="quocgiaList" style="display: none;">
+                <option value="">Chọn quốc gia</option>
+            </select>
+        </td>
+        <td id="thoigian"><input type="date" id="thoigian" /></td>
+        <td id="namSX"><input type="text" id="namSX" /></td>
+        <td id="hashtag"><input type="text" id="hashtag" /></td>
+    </tbody>
+</table>
+    @{ 
+        Html.RenderAction("Danhsach");
+    }
+  
+
+    <script>
+        ADDRecord()
+        function ADDRecord() {
+            var index = 0
+            $('#btnPlusRecord').click(function () {
+                ADD(index)
+                index++
+                function ADD(i) {
+                    const mainImage = $('input#mainImage').val()
+                    const maphim = $('input#maphim').val()
+                    const tenphim = $('input#tenphim').val()
+                    const motaND = $('input#motaND').val()
+                    const chitietND = $('input#chitietND').val()
+                    const quocgia = $('input#quocgia').val()
+                    const thoigian = $('input#thoigian').val()
+                    const namSX = $('input#namSX').val()
+                    const hashtag = $('input#hashtag').val()
+
+                    const html = `<tr id="row${i}">
+                            <td id="mainImage"><img width=70 height=60 src="${mainImage}" /></td>
+                            <td id="maphim">${maphim}</td>
+                            <td id="tenphim">${tenphim}</td>
+                            <td id="motaND">${motaND}</td>
+                            <td id="chitietND">${chitietND}</td>
+                            <td id="quocgia">${quocgia}</td>
+                            <td id="thoigian">${thoigian}</td>
+                            <td id="namSX">${namSX}</td>
+                            <td id="hashtag">${hashtag}</td>
+                            <td><button id="${i}" class="btn btnDeleteCurrRow btn-sm">x</button></td>
+                         </tr>`
+                    $('#showRecords > tbody').append(html)
+
+                    $('.btnDeleteCurrRow').click(function (e) {
+                        e.stopImmediatePropagation()
+                        $(`#showRecords > tbody > tr`).remove(`#row${e.target.id}`)
+                    })
+                }
+            })
+        }
+
+        SaveRecords()
+        function SaveRecords() {
+            $('#btnSaveRecord').click(function () {
+                //dem so luong ban ghi
+                let recordsCount = $(`#showRecords > tbody`).find(`tr`)
+                const listPhims = []
+                recordsCount.each(function (i, val) {
+                    const phim = {
+                        mainImage: $(val).children().eq(0).children().attr("src"),
+                        maphim: $(val).children().eq(1).text(),
+                        tenphim: $(val).children().eq(2).text(),
+                        motaND: $(val).children().eq(3).text(),
+                        chitietND: $(val).children().eq(4).text(),
+                        quocgia: $(val).children().eq(5).text(),
+                        thoigian: $(val).children().eq(6).text(),
+                        namSX: $(val).children().eq(7).text(),
+                        hashtag: $(val).children().eq(8).text()
+                    }
+                    listPhims.push(phim)
+                })
+
+                $.post(`/dta1215/Them`, { list: listPhims }, function (res) {
+                    (res == "OK") && (window.location.href = "dta1215/Themphim")
+                })
+            })
+        }
+
+ 
+        async function quocgiaList() {
+            const quocgias = await $.get(`/dta1215/getQuocGia`)
+            const html = quocgias.map(function (val,i) {
+                return `<option class="optionSelect" value="${val}">${val}</option>`
+            })
+            $('#quocgiaList').append(html)
+            $('#quocgiaList').show()
+
+          
+            $('#quocgiaList').change(function () {
+                const quocgiaSelect = $('#quocgiaList > option:selected').val()
+                //$('input#quocgia').val(function () {
+                //    return this.val + quocgiaSelect
+                //})
+                $('input#quocgia').val("" + `${quocgiaSelect}`)
+            })
+        }   
+        $('input#quocgia').click(function () {
+            quocgiaList()
+        })
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<phimvietnamxua.Models.phim>
+
+<style>
+    img {
+        display: block !important;
+        width: 70px !important;
+        height: 50px !important;
+        float: right !important;
+        box-shadow: none !important;
+    }
+    .danhsachPhim {
+        display: table-cell;
+        float: left;
+    }
+    .trPhim{
+
+    }
+</style>
+<table class="table danhsachPhim">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.mainImage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.maphim)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tenphim)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.namSX)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.thoigian)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.quocgia)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr class="trPhim">
+         <td>
+             <img src="@item.mainImage" alt="Alternate Text" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.maphim)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tenphim)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.namSX)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.thoigian)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.quocgia)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<phimvietnamxua.Models.phim>
+
+@{
+    string time = "";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+</head>
+    <text id="phimCount" style="display: none;" count="@Model.Count()"></text>
+<body>
+    @foreach (var item in Model)
+    {
+        <div class="itemSlide">
+            @if (item.namSX == null)
+            {
+                time = "Đang cập nhật";
+            }
+            else
+            {
+                time = Convert.ToString(item.namSX);
+            }
+            <a style="color: #551A8b;" href="https://www.google.com/search?q=@item.tenphim" target="_blank"><p class="p">@item.tenphim : <text class="thoigian">@time</text></p></a>
+            <a href="@item.mainImage" target="_blank"><div class="contentImg" style="background-image: url(@item.mainImage)"></div></a>
+        </div>
+    }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/vi.min.js" integrity="sha512-LvYVj/X6QpABcaqJBqgfOkSjuXv81bLz+rpz0BQoEbamtLkUF2xhPNwtI/xrokAuaNEQAMMA1/YhbeykYzNKWg==" crossorigin="anonymous"></script>
+    <script>
+            changeDate()
+        $(document).ready(function () {
+        })
+        function changeDate() {
+            let convertTime
+            $('.thoigian').each(function () {
+                let getDate = $(this).text()
+                if (getDate != "Đang cập nhật".trim()) {
+                    //convertTime = moment(getDate.toString(), "YYYYMMDD").fromNow()
+                    //getYear = moment(getDate).format('YYYY')
+                    convertTimeAgo = moment(getDate, "YYYY").fromNow()
+                    $(this).html(`${getDate} <text class="subContent"> ${convertTimeAgo}</text>`)
+                }
+            })
+        }
+    </script>
+</body>
+</html>
+

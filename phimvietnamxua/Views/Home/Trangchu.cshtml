@@ -1,0 +1,144 @@
+﻿
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Phim truyện cũ</title>
+</head>
+@{
+    var mobile = Request.Browser.IsMobileDevice; //check mobile app
+}
+<style>
+    .contentSlider {
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        position: absolute;
+        top: 170px;
+    }
+</style>
+<body id="trangchuBody">
+    <div class="contentSlider">
+        <div class="slider">
+            @{
+                Html.RenderAction("Noidung");
+            }
+        </div>
+    </div>
+
+    <script>
+        async function DispatchTouchSlider() {
+            const touchSliderPage = await $.get('TouchSlider')
+            $('#trangchuBody').empty().html(touchSliderPage)
+        }
+        $('#btnTouchSlider').click(function () {
+            DispatchTouchSlider()
+        })
+
+        hasCookieOfPosition()
+        $(document).ready(function () {
+
+        })
+
+        function AutoSlider(hasCookieOfPos, progressWidth) {
+            const sumHeightofItems = () => {
+                let allSumHeightToScroll = 0;
+                $('.itemSlide').map(function (i, val) {
+                    let currItemHeight = $(val).innerHeight();
+                    allSumHeightToScroll += currItemHeight;
+                })
+                return allSumHeightToScroll - 300;
+            }
+            let phimsCount = $('#phimCount').attr("count");
+            //tinh ra tong chieu cao cua slider-Container
+            let heights = sumHeightofItems();
+            let durationEachItem = 1200
+            //tinh ra duoc tong thoi gian
+            let speeds = phimsCount * durationEachItem;
+            //Tong toc do chia cho tong chieu dai
+            let averageSpeed = (speeds / heights)
+
+            const progressElement = $('.progressSlide')
+            // ProgresBar
+            function progressBar(speed) {
+                progressElement.css('width', "0%")
+                progressElement.animate({ width: '100%' }, speed, "linear", function () {
+                    progressBar(speed)
+                })
+            }
+            //HAM xu ly slide animation
+            slideHandler(heights, speeds)
+            function slideHandler(height, speed) {
+                if (hasCookieOfPos) {
+                    $('.slider').animate({ scrollTop: hasCookieOfPos }, 0);
+                    speed = (averageSpeed * (height - hasCookieOfPos));
+                    $('.slider').animate({ scrollTop: height }, speed, "linear", function () {
+                        slideHandler(height, speed)
+                    })
+                    //progress slider
+                    progressElement.animate({ width: progressWidth }, 0);
+                    progressBar(speed)
+                } else {
+                    $('.slider').animate({ scrollTop: 0 }, 0)
+                    $('.slider').animate({ scrollTop: height }, speed, "linear", function () {
+                        slideHandler(height, speed)
+                    })
+                    progressBar(speed)
+                }
+            }
+            //Xu ly khi di chuot vao dung im slide cho toi khi ri chuot ra lai nhu bt
+            $('.slider').hover(function () {
+                $('.slider').stop().stop()
+                progressElement.stop().stop()
+            }, function () {
+                speeds = (averageSpeed * (heights - $(this).scrollTop()))
+                $('.slider').animate({ scrollTop: heights }, speeds, "linear", function () {
+                    speeds = phimsCount * durationEachItem;
+                    heights = sumHeightofItems();
+                    slideHandler(heights, speeds)
+                })
+                // ProgressBar
+                progressElement.animate({ width: '100%' }, speeds, "linear", function () {
+                    progressBar(speeds)
+                })
+            })
+        }
+
+        function hasCookieOfPosition() {
+            let topSaved = getCookie('scrollTop')
+            let progressSave = getCookie('progressWidth')
+            AutoSlider(topSaved, progressSave)
+        }
+
+        $('#btnSavePosition').click(function (e) {
+            setCookie('scrollTop', $('.slider').scrollTop(), 1);
+            setCookie('progressWidth', $('.progressSlide').css("width"), 1);
+            window.location.href = "/";
+        })
+        $('#btnResetPosition').click(function () {
+            document.cookie = "scrollTop=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "width=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            window.location.href = "/";
+        })
+
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            var expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+    </script>
+</body>
+</html>

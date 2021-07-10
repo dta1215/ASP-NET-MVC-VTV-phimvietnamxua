@@ -1,0 +1,8 @@
+﻿.contentSlider {
+    position: relative;
+    top: 60px;
+    width: 750px;
+    height: 450px;
+    margin: auto;
+    overflow: hidden;
+}
